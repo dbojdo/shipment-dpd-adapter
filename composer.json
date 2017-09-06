@@ -1,0 +1,38 @@
+{
+    "name": "webit/shipment-dpd-adapter",
+    "description": "DPD Adapter for the Shipment Library",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "dbojdo",
+            "email": "daniel@bojdo.eu"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "webit/shipment": "^2.0.0",
+        "webit/dpd-client": "^1.0.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.5|^5.0",
+        "fzaninotto/faker": "^1.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Webit\\Shipment\\DpdAdapter\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Webit\\Shipment\\DpdAdapter\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
+    }
+}
