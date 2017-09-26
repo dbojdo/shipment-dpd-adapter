@@ -4,6 +4,7 @@ namespace Webit\Shipment\DpdAdapter;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Webit\DPDClient\DPDInfoServices\Client as InfoServicesClient;
+use Webit\DPDClient\DPDInfoServices\Common\Exception\DPDInfoServicesException;
 use Webit\DPDClient\DPDInfoServices\CustomerEvents\CustomerEventV3;
 use Webit\DPDClient\DPDInfoServices\CustomerEvents\EventsSelectTypeEnum;
 use Webit\DPDClient\DPDServices\Client as ServicesClient;
@@ -192,11 +193,15 @@ class ShipmentDpdAdapter implements VendorAdapterInterface
      */
     public function synchronizeParcelStatus(ParcelInterface $parcel)
     {
-        $response = $this->infoServicesClient->getEventsForWaybillV1(
-            $parcel->getNumber(),
-            EventsSelectTypeEnum::all(),
-            $this->language
-        );
+        try {
+            $response = $this->infoServicesClient->getEventsForWaybillV1(
+                $parcel->getNumber(),
+                EventsSelectTypeEnum::all(),
+                $this->language
+            );
+        } catch (DPDInfoServicesException $e) {
+            return;
+        }
 
         /** @var CustomerEventV3[] $events */
         $events = $response->eventsList();
