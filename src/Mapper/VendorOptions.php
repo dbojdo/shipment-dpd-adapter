@@ -2,7 +2,7 @@
 
 namespace Webit\Shipment\DpdAdapter\Mapper;
 
-use Webit\DPDClient\PackagesGeneration\OpenUMLF\Services\Guarantee;
+use Webit\DPDClient\DPDServices\PackagesGeneration\OpenUMLF\Services\Guarantee;
 use Webit\Shipment\Vendor\VendorOption;
 
 final class VendorOptions

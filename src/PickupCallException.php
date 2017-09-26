@@ -2,7 +2,7 @@
 
 namespace Webit\Shipment\DpdAdapter;
 
-use Webit\DPDClient\PackagesPickupCall\PackagesPickupCallResponseV3;
+use Webit\DPDClient\DPDServices\PackagesPickupCall\PackagesPickupCallResponseV3;
 
 class PickupCallException extends DpdAdapterException
 {

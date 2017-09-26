@@ -2,8 +2,8 @@
 
 namespace Webit\Shipment\DpdAdapter\Mapper\OpenUMLF;
 
-use Webit\DPDClient\PackagesGeneration\OpenUMLF\PackageV2;
-use Webit\DPDClient\PackagesGeneration\OpenUMLF\PayerType;
+use Webit\DPDClient\DPDServices\PackagesGeneration\OpenUMLF\PackageV2;
+use Webit\DPDClient\DPDServices\PackagesGeneration\OpenUMLF\PayerType;
 use Webit\Shipment\Address\DefaultSenderAddressProviderInterface;
 use Webit\Shipment\Consignment\ConsignmentInterface;
 

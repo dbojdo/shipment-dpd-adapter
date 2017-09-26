@@ -2,7 +2,7 @@
 
 namespace Webit\Shipment\DpdAdapter\Mapper\OpenUMLF;
 
-use Webit\DPDClient\PackagesGeneration\OpenUMLF\Sender;
+use Webit\DPDClient\DPDServices\PackagesGeneration\OpenUMLF\Sender;
 use Webit\Shipment\Address\SenderAddressInterface;
 use Webit\Shipment\DpdAdapter\Mapper\PostCodeSanitiser;
 

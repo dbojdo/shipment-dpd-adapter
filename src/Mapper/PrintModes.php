@@ -2,8 +2,8 @@
 
 namespace Webit\Shipment\DpdAdapter\Mapper;
 
-use Webit\DPDClient\DocumentGeneration\OutputDocFormatDSPEnumV1;
-use Webit\DPDClient\DocumentGeneration\OutputDocPageFormatDSPEnumV1;
+use Webit\DPDClient\DPDServices\DocumentGeneration\OutputDocFormatDSPEnumV1;
+use Webit\DPDClient\DPDServices\DocumentGeneration\OutputDocPageFormatDSPEnumV1;
 
 final class PrintModes
 {

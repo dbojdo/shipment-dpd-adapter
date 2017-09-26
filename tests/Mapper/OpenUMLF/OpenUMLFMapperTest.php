@@ -3,8 +3,8 @@
 namespace Webit\Shipment\DpdAdapter\Mapper\OpenUMLF;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Webit\DPDClient\PackagesGeneration\OpenUMLF\OpenUMLF;
-use Webit\DPDClient\PackagesGeneration\OpenUMLF\OpenUMLFV2;
+use Webit\DPDClient\DPDServices\PackagesGeneration\OpenUMLF\OpenUMLF;
+use Webit\DPDClient\DPDServices\PackagesGeneration\OpenUMLF\OpenUMLFV2;
 use Webit\Shipment\DpdAdapter\AbstractTest;
 
 class OpenUMLFMapperTest extends AbstractTest
@@ -40,8 +40,8 @@ class OpenUMLFMapperTest extends AbstractTest
         );
 
         $packages = array(
-            $this->prophesize('Webit\DPDClient\PackagesGeneration\OpenUMLF\PackageV2')->reveal(),
-            $this->prophesize('Webit\DPDClient\PackagesGeneration\OpenUMLF\PackageV2')->reveal()
+            $this->prophesize('Webit\DPDClient\DPDServices\PackagesGeneration\OpenUMLF\PackageV2')->reveal(),
+            $this->prophesize('Webit\DPDClient\DPDServices\PackagesGeneration\OpenUMLF\PackageV2')->reveal()
         );
 
         $this->packageMapper->map($consignments->get(0))->willReturn($packages[0]);

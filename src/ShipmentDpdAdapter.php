@@ -3,24 +3,28 @@
 namespace Webit\Shipment\DpdAdapter;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Webit\DPDClient\Client;
-use Webit\DPDClient\DPDPickupCallParams\DpdPickupCallParamsV3;
-use Webit\DPDClient\DPDPickupCallParams\PickupCallOperationTypeDPPEnumV1;
-use Webit\DPDClient\DPDPickupCallParams\PickupCallOrderTypeDPPEnumV1;
-use Webit\DPDClient\DPDPickupCallParams\PickupCallSimplifiedDetailsDPPV1;
-use Webit\DPDClient\DPDPickupCallParams\PickupCustomerDPPV1;
-use Webit\DPDClient\DPDPickupCallParams\PickupPackagesParamsDPPV1;
-use Webit\DPDClient\DPDPickupCallParams\PickupPayerDPPV1;
-use Webit\DPDClient\DPDServicesParams\DPDServicesParamsV1;
-use Webit\DPDClient\DPDServicesParams\PackageDSPV1;
-use Webit\DPDClient\DPDServicesParams\PickupAddressDSPV1;
-use Webit\DPDClient\DPDServicesParams\PolicyDSPEnumV1;
-use Webit\DPDClient\DPDServicesParams\SessionDSPV1;
-use Webit\DPDClient\PackagesGeneration\OpenUMLF\OpenUMLFV2;
-use Webit\DPDClient\PackagesGeneration\PkgNumsGenerationPolicyEnumV1;
+use Webit\DPDClient\DPDInfoServices\Client as InfoServicesClient;
+use Webit\DPDClient\DPDInfoServices\CustomerEvents\CustomerEventV3;
+use Webit\DPDClient\DPDInfoServices\CustomerEvents\EventsSelectTypeEnum;
+use Webit\DPDClient\DPDServices\Client as ServicesClient;
+use Webit\DPDClient\DPDServices\DPDPickupCallParams\DpdPickupCallParamsV3;
+use Webit\DPDClient\DPDServices\DPDPickupCallParams\PickupCallOperationTypeDPPEnumV1;
+use Webit\DPDClient\DPDServices\DPDPickupCallParams\PickupCallOrderTypeDPPEnumV1;
+use Webit\DPDClient\DPDServices\DPDPickupCallParams\PickupCallSimplifiedDetailsDPPV1;
+use Webit\DPDClient\DPDServices\DPDPickupCallParams\PickupCustomerDPPV1;
+use Webit\DPDClient\DPDServices\DPDPickupCallParams\PickupPackagesParamsDPPV1;
+use Webit\DPDClient\DPDServices\DPDPickupCallParams\PickupPayerDPPV1;
+use Webit\DPDClient\DPDServices\DPDServicesParams\DPDServicesParamsV1;
+use Webit\DPDClient\DPDServices\DPDServicesParams\PackageDSPV1;
+use Webit\DPDClient\DPDServices\DPDServicesParams\PickupAddressDSPV1;
+use Webit\DPDClient\DPDServices\DPDServicesParams\PolicyDSPEnumV1;
+use Webit\DPDClient\DPDServices\DPDServicesParams\SessionDSPV1;
+use Webit\DPDClient\DPDServices\PackagesGeneration\OpenUMLF\OpenUMLFV2;
+use Webit\DPDClient\DPDServices\PackagesGeneration\PkgNumsGenerationPolicyEnumV1;
 use Webit\Shipment\Consignment\ConsignmentInterface;
 use Webit\Shipment\Consignment\DispatchConfirmationInterface;
 use Webit\Shipment\DpdAdapter\Mapper\OpenUMLF\OpenUMLFMapper;
+use Webit\Shipment\DpdAdapter\Mapper\ParcelStatusMapper;
 use Webit\Shipment\DpdAdapter\Mapper\PickupSenderProvider;
 use Webit\Shipment\DpdAdapter\Tracking\TrackingUrlProvider;
 use Webit\Shipment\DpdAdapter\Vendor\VendorFactory;
@@ -43,8 +47,14 @@ class ShipmentDpdAdapter implements VendorAdapterInterface
     /** @var PickupSenderProvider */
     private $pickupSenderProvider;
 
-    /** @var Client */
-    private $client;
+    /** @var ParcelStatusMapper */
+    private $parcelStatusMapper;
+
+    /** @var ServicesClient */
+    private $servicesClient;
+
+    /** @var InfoServicesClient */
+    private $infoServicesClient;
 
     /** @var int */
     private $fid;
@@ -58,7 +68,9 @@ class ShipmentDpdAdapter implements VendorAdapterInterface
      * @param TrackingUrlProvider $trackingUrlProvider
      * @param OpenUMLFMapper $openUmlfMapper
      * @param PickupSenderProvider $pickupSenderProvider
-     * @param Client $client
+     * @param ParcelStatusMapper $parcelStatusMapper
+     * @param ServicesClient $servicesClient
+     * @param InfoServicesClient $infoServicesClient
      * @param int $fid
      * @param string $language
      */
@@ -67,7 +79,9 @@ class ShipmentDpdAdapter implements VendorAdapterInterface
         TrackingUrlProvider $trackingUrlProvider,
         OpenUMLFMapper $openUmlfMapper,
         PickupSenderProvider $pickupSenderProvider,
-        Client $client,
+        ParcelStatusMapper $parcelStatusMapper,
+        ServicesClient $servicesClient,
+        InfoServicesClient $infoServicesClient,
         $fid,
         $language
     ) {
@@ -75,7 +89,9 @@ class ShipmentDpdAdapter implements VendorAdapterInterface
         $this->trackingUrlProvider = $trackingUrlProvider;
         $this->openUmlfMapper = $openUmlfMapper;
         $this->pickupSenderProvider = $pickupSenderProvider;
-        $this->client = $client;
+        $this->parcelStatusMapper = $parcelStatusMapper;
+        $this->servicesClient = $servicesClient;
+        $this->infoServicesClient = $infoServicesClient;
         $this->fid = $fid;
         $this->language = $language;
     }
@@ -103,7 +119,7 @@ class ShipmentDpdAdapter implements VendorAdapterInterface
     public function dispatch(DispatchConfirmationInterface $dispatchConfirmation)
     {
         $openUMLF = $this->openUmlfMapper->mapDispatchConfirmation($dispatchConfirmation);
-        $response = $this->client->generatePackagesNumbersV3(
+        $response = $this->servicesClient->generatePackagesNumbersV3(
             $openUMLF,
             PkgNumsGenerationPolicyEnumV1::allOrNothing(),
             $this->language
@@ -153,7 +169,7 @@ class ShipmentDpdAdapter implements VendorAdapterInterface
                 )
             );
 
-            $pickupCall = $this->client->packagesPickupCallV3($pickupCallParams);
+            $pickupCall = $this->servicesClient->packagesPickupCallV3($pickupCallParams);
 
             if ($pickupCall->statusInfo()->status() != 'OK') {
                 throw PickupCallException::fromPickupCallResponse($pickupCall);
@@ -176,7 +192,26 @@ class ShipmentDpdAdapter implements VendorAdapterInterface
      */
     public function synchronizeParcelStatus(ParcelInterface $parcel)
     {
-        // TODO: Implement synchronizeParcelStatus() method.
+        $response = $this->infoServicesClient->getEventsForWaybillV1(
+            $parcel->getNumber(),
+            EventsSelectTypeEnum::all(),
+            $this->language
+        );
+
+        /** @var CustomerEventV3[] $events */
+        $events = $response->eventsList();
+        $event = array_shift($events);
+        if (! $event) {
+            return;
+        }
+
+        $parcel->setVendorStatus($businessCode = $event->businessCode());
+        $status = $this->parcelStatusMapper->map($businessCode);
+        if (!$status) {
+            return;
+        }
+
+        $parcel->setStatus($status);
     }
 
     /**
@@ -210,7 +245,7 @@ class ShipmentDpdAdapter implements VendorAdapterInterface
     {
         $params = $this->serviceParams(null, array($consignment->getVendorId()));
 
-        $response = $this->client->generateSpedLabelsV2($params);
+        $response = $this->servicesClient->generateSpedLabelsV2($params);
 
         return $response->documentData();
     }
@@ -225,7 +260,7 @@ class ShipmentDpdAdapter implements VendorAdapterInterface
         $sessionId = $this->sessionIdOfDispatchConfirmation($dispatchConfirmation);
         $params = $this->serviceParams($sessionId);
 
-        $response = $this->client->generateSpedLabelsV2($params);
+        $response = $this->servicesClient->generateSpedLabelsV2($params);
 
         return $response->documentData();
     }
@@ -240,7 +275,7 @@ class ShipmentDpdAdapter implements VendorAdapterInterface
         $sessionId = $this->sessionIdOfDispatchConfirmation($dispatchConfirmation);
         $params = $this->serviceParams($sessionId);
 
-        $response = $this->client->generateProtocolV1($params);
+        $response = $this->servicesClient->generateProtocolV1($params);
 
         return $response->documentData();
     }
@@ -268,7 +303,7 @@ class ShipmentDpdAdapter implements VendorAdapterInterface
      */
     private function protocol($sessionId)
     {
-        $protocolResponse = $this->client->generateProtocolV1(
+        $protocolResponse = $this->servicesClient->generateProtocolV1(
             $this->serviceParams($sessionId)
         );
 

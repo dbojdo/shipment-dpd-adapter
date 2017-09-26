@@ -2,7 +2,7 @@
 
 namespace Webit\Shipment\DpdAdapter\Mapper\OpenUMLF;
 
-use Webit\DPDClient\PackagesGeneration\OpenUMLF\Parcel;
+use Webit\DPDClient\DPDServices\PackagesGeneration\OpenUMLF\Parcel;
 use Webit\Shipment\DpdAdapter\AbstractTest;
 use Webit\Shipment\Parcel\ParcelInterface;
 

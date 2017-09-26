@@ -36,7 +36,7 @@ class PickupSenderProviderTest extends AbstractTest
     public function shouldProviderPickupSender()
     {
         $senderAddress = $this->prophesize('Webit\Shipment\Address\SenderAddressInterface')->reveal();
-        $pickupSender = $this->prophesize('Webit\DPDClient\DPDPickupCallParams\PickupSenderDPPV1')->reveal();
+        $pickupSender = $this->prophesize('Webit\DPDClient\DPDServices\DPDPickupCallParams\PickupSenderDPPV1')->reveal();
 
         $this->defaultSenderAddressProvider->getSender()->willReturn($senderAddress);
         $this->pickupSenderMapper->map($senderAddress)->willReturn($pickupSender);

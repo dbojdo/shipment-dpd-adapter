@@ -2,7 +2,7 @@
 
 namespace Webit\Shipment\DpdAdapter\Mapper\OpenUMLF;
 
-use Webit\DPDClient\PackagesGeneration\OpenUMLF\Services;
+use Webit\DPDClient\DPDServices\PackagesGeneration\OpenUMLF\Services;
 use Webit\Shipment\Consignment\ConsignmentInterface;
 use Webit\Shipment\DpdAdapter\Mapper\VendorOptions;
 use Webit\Shipment\Vendor\VendorOptionValueCollection;

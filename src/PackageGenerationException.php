@@ -2,7 +2,7 @@
 
 namespace Webit\Shipment\DpdAdapter;
 
-use Webit\DPDClient\PackagesGeneration\PackagesGenerationResponseV3;
+use Webit\DPDClient\DPDServices\PackagesGeneration\PackagesGenerationResponseV3;
 
 class PackageGenerationException extends DpdAdapterException
 {

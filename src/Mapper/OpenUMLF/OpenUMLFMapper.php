@@ -8,8 +8,8 @@
 
 namespace Webit\Shipment\DpdAdapter\Mapper\OpenUMLF;
 
-use Webit\DPDClient\PackagesGeneration\OpenUMLF\OpenUMLF;
-use Webit\DPDClient\PackagesGeneration\OpenUMLF\OpenUMLFV2;
+use Webit\DPDClient\DPDServices\PackagesGeneration\OpenUMLF\OpenUMLF;
+use Webit\DPDClient\DPDServices\PackagesGeneration\OpenUMLF\OpenUMLFV2;
 use Webit\Shipment\Consignment\DispatchConfirmationInterface;
 
 class OpenUMLFMapper

@@ -2,7 +2,7 @@
 
 namespace Webit\Shipment\DpdAdapter\Mapper;
 
-use Webit\DPDClient\DPDPickupCallParams\PickupSenderDPPV1;
+use Webit\DPDClient\DPDServices\DPDPickupCallParams\PickupSenderDPPV1;
 use Webit\Shipment\Address\SenderAddressInterface;
 use Webit\Shipment\DpdAdapter\AbstractTest;
 

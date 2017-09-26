@@ -4,7 +4,7 @@ namespace Webit\Shipment\DpdAdapter\Mapper\OpenUMLF;
 
 use Prophecy\Prophecy\ObjectProphecy;
 use Webit\Addressing\Model\Country;
-use Webit\DPDClient\PackagesGeneration\OpenUMLF\Receiver;
+use Webit\DPDClient\DPDServices\PackagesGeneration\OpenUMLF\Receiver;
 use Webit\Shipment\Address\DeliveryAddressInterface;
 use Webit\Shipment\DpdAdapter\AbstractTest;
 use Webit\Shipment\DpdAdapter\Mapper\PostCodeSanitiser;

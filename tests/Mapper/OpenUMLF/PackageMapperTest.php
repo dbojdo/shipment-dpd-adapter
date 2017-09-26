@@ -5,10 +5,10 @@ namespace Webit\Shipment\DpdAdapter\Mapper\OpenUMLF;
 use Doctrine\Common\Collections\ArrayCollection;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
-use Webit\DPDClient\PackagesGeneration\OpenUMLF\PackageV2;
-use Webit\DPDClient\PackagesGeneration\OpenUMLF\PayerType;
-use Webit\DPDClient\PackagesGeneration\OpenUMLF\Receiver;
-use Webit\DPDClient\PackagesGeneration\OpenUMLF\Sender;
+use Webit\DPDClient\DPDServices\PackagesGeneration\OpenUMLF\PackageV2;
+use Webit\DPDClient\DPDServices\PackagesGeneration\OpenUMLF\PayerType;
+use Webit\DPDClient\DPDServices\PackagesGeneration\OpenUMLF\Receiver;
+use Webit\DPDClient\DPDServices\PackagesGeneration\OpenUMLF\Sender;
 use Webit\Shipment\Address\SenderAddressInterface;
 use Webit\Shipment\DpdAdapter\AbstractTest;
 
@@ -98,7 +98,7 @@ class PackageMapperTest extends AbstractTest
 
         $this->senderMapper->map($senderAddress)
             ->willReturn($mappedSender = Sender::fromFid($this->randomPositiveInt(9999)));
-        $this->servicesMapper->map($consignment)->willReturn($mappedServices = $this->prophesize('Webit\DPDClient\PackagesGeneration\OpenUMLF\Services')->reveal());
+        $this->servicesMapper->map($consignment)->willReturn($mappedServices = $this->prophesize('Webit\DPDClient\DPDServices\PackagesGeneration\OpenUMLF\Services')->reveal());
 
         $consignment->addVendorData('reference', Argument::type('string'))->willReturn(null);
 
