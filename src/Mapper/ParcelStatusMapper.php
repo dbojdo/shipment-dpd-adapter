@@ -17,11 +17,11 @@ class ParcelStatusMapper
             return ConsignmentStatusList::STATUS_DELIVERED;
         }
 
-        if ($businessCode == BusinessCodes::PARCEL_REGISTERED_NOT_DISPATCHED_030103) {
+        if (preg_match('/^03/', $businessCode)) {
             return ConsignmentStatusList::STATUS_DISPATCHED;
         }
 
-        if ((int)$businessCode < (int)BusinessCodes::PARCEL_DELIVERED_190101) {
+        if (preg_match('/^[013]/', $businessCode)) {
             return ConsignmentStatusList::STATUS_COLLECTED;
         }
 

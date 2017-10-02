@@ -44,6 +44,14 @@ class ParcelStatusMapperTest extends AbstractTest
                 BusinessCodes::PARCEL_COLLECTED_BY_COURIER_040101,
                 ConsignmentStatusList::STATUS_COLLECTED
             ),
+            'in transit 1' => array(
+                BusinessCodes::PARCEL_DISPATCHED_TO_BE_DELIVERED_170101,
+                ConsignmentStatusList::STATUS_COLLECTED
+            ),
+            'in transit 2' => array(
+                BusinessCodes::PARCEL_RECEIVED_BY_DEPOT_330137,
+                ConsignmentStatusList::STATUS_COLLECTED
+            ),
             'concerned' => array(
                 BusinessCodes::PARCEL_RETURN_500611,
                 ConsignmentStatusList::STATUS_CONCERNED
