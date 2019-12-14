@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": ">=5.4",
-        "webit/shipment": "^2.0.0",
+        "webit/shipment": "^2.0.0|^3.0.0",
         "webit/dpd-client": "^1.0.0"
     },
     "require-dev": {
