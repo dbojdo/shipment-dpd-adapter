@@ -24,6 +24,7 @@ use Webit\DPDClient\DPDServices\PackagesGeneration\OpenUMLF\OpenUMLFV2;
 use Webit\DPDClient\DPDServices\PackagesGeneration\PkgNumsGenerationPolicyEnumV1;
 use Webit\Shipment\Consignment\ConsignmentInterface;
 use Webit\Shipment\Consignment\DispatchConfirmationInterface;
+use Webit\Shipment\DpdAdapter\Mapper\AmbiguousParcelStatusException;
 use Webit\Shipment\DpdAdapter\Mapper\OpenUMLF\OpenUMLFMapper;
 use Webit\Shipment\DpdAdapter\Mapper\ParcelStatusMapper;
 use Webit\Shipment\DpdAdapter\Mapper\PickupSenderProvider;
@@ -203,15 +204,21 @@ class ShipmentDpdAdapter implements VendorAdapterInterface
             return;
         }
 
-        /** @var CustomerEventV3[] $events */
         $events = $response->eventsList();
-        $event = array_shift($events);
-        if (! $event) {
-            return;
-        }
+        $status = null;
+        do {
+            $event = array_shift($events);
+            if (! $event) {
+                return;
+            }
 
-        $parcel->setVendorStatus($businessCode = $event->businessCode());
-        $status = $this->parcelStatusMapper->map($businessCode);
+            $parcel->setVendorStatus($businessCode = $event->businessCode());
+            try {
+                $status = $this->parcelStatusMapper->map($businessCode);
+            } catch (AmbiguousParcelStatusException $e) {
+            }
+        } while (!$status);
+
         if (!$status) {
             return;
         }

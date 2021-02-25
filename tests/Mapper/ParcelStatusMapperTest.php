@@ -58,4 +58,13 @@ class ParcelStatusMapperTest extends AbstractTest
             )
         );
     }
+
+    /**
+     * @test
+     */
+    public function itThrowsExceptionForSentNotificationStatus()
+    {
+        $this->expectException('Webit\Shipment\DpdAdapter\Mapper\AmbiguousParcelStatusException');
+        $this->mapper->map(BusinessCodes::PARCEL_EMAIL_NOTIFICATION_SENT);
+    }
 }

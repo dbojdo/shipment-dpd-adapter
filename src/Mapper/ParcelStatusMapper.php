@@ -21,6 +21,10 @@ class ParcelStatusMapper
             return ConsignmentStatusList::STATUS_DISPATCHED;
         }
 
+        if ($businessCode == BusinessCodes::PARCEL_EMAIL_NOTIFICATION_SENT) {
+            throw AmbiguousParcelStatusException::create($businessCode);
+        }
+
         if (preg_match('/^[013]/', $businessCode)) {
             return ConsignmentStatusList::STATUS_COLLECTED;
         }
